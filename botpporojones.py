@@ -60,5 +60,20 @@ async def stock(ctx, ticker):
 	response = "Here's some information about that security you requested:\n" + "The current price is: " + data["Global Quote"]["05. price"]
 	await ctx.send(response)
 
+@bot.command(name='ip', help='IP lookup info')
+async def ip(ctx, address):
+	base_url = 'https://ipapi.co/'
+	json_url = base_url + address + '/json'
+	get_data = requests.get(json_url)
+	bulk_data = get_data.json()
+	response1 = "Looking up info regarding " + address + "\n"
+	response2 = "City: " + bulk_data["city"] + "\n"
+	response3 = "State or Region: " + bulk_data["region"] + "\n"
+	response4 = "Country: " + bulk_data["country_name"] + "\n"
+	response5 = "Organization: " + bulk_data["org"] + "\n"
+	full_reply = response1 + response2 + response3 + response4 + response5
+	await ctx.send(full_reply)
+
+
 bot.run(token)
 
