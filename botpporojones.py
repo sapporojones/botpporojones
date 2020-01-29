@@ -19,7 +19,7 @@ load_dotenv()
 #pull ins from the env file
 token = os.getenv('DISCORD_TOKEN')
 weather_key = os.getenv('API_KEY')
-
+stockmarket_key = os.getenv('STOCKMARKET_KEY')
 
 #bot command modifier
 bot = commands.Bot(command_prefix='!')
@@ -52,7 +52,13 @@ async def weather(ctx, zip_code):
 	response = "The temperature at " + str(zip_code) + " is " + str(weather_temp) + " degrees fahrenheit, the weather conditions are described as " + weather_description
 	await ctx.send(response)
 
-
+@bot.command(name='stock', help='stock quote lookup')
+async def stock(ctx, ticker):
+	query = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + ticker + '&apikey=' + stockmarket_key
+	json_output = requests.get(query)
+	data = json_output.json()
+	response = "Here's some information about that security you requested:\n" + "The current price is: " + data["Global Quote"]["05. price"]
+	await ctx.send(response)
 
 bot.run(token)
 
