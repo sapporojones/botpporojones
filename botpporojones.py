@@ -3,6 +3,10 @@
 #0.1 - initial work
 #0.2 - conert to bot.commands
 #0.3 - add weather command
+#0.4 - add stock ticker lookup
+#0.5 - add IP lookup
+#0.6 - add reddit image pull and PRAW support
+
 
 #imports
 import os
@@ -10,6 +14,8 @@ import random
 import discord
 import requests
 import json
+import praw
+
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -73,6 +79,21 @@ async def ip(ctx, address):
 	response5 = "Organization: " + bulk_data["org"] + "\n"
 	full_reply = response1 + response2 + response3 + response4 + response5
 	await ctx.send(full_reply)
+
+@bot.command(name='r', help='returns posts from the specified subreddit')
+async def r(ctx, sub_reddit):
+	reddit = praw.Reddit(client_id='client_id_from_reddit',
+                     client_secret='client_secret_from_reddit',
+                     password='changeme',
+                     user_agent='testscript by /u/sapporojones',
+                     username='your_username')
+
+
+
+	random_submission = reddit.subreddit(sub_reddit).random()
+	result = "https://www.reddit.com/r/" + sub_reddit + "/" + str(random_submission) + "/"
+	await ctx.send(result)
+
 
 
 bot.run(token)
