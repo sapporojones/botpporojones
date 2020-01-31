@@ -92,8 +92,9 @@ async def r(ctx, sub_reddit):
                      user_agent='testscript by /u/sapporojones',
                      username='{reddit_username}')
 	random_submission = reddit.subreddit(sub_reddit).random()
+	submission_url = reddit.submission(random_submission).url
 	content_url = "https://www.reddit.com/r/" + sub_reddit + "/" + str(random_submission) 
-	await ctx.send(content_url)
+	await ctx.send(submission_url)
 
 
 @bot.command(name='time', help='current time for a variety of timezones')
