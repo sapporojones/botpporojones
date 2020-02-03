@@ -1,3 +1,4 @@
+
 #using bot commands now like a big boy
 #bot sappo
 #0.1 - initial work
@@ -8,7 +9,7 @@
 #0.6 - add reddit image pull and PRAW support
 #0.7 - now pulling more info for stock quotes and has it properly formatted.  working on the ip command now to add google maps functionality
 #0.8 - adding a time command
-
+#0.9 - moving the PRAW reddit definition vars to .env where they are meant to live
 
 
 #imports
@@ -30,6 +31,15 @@ load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 weather_key = os.getenv('API_KEY')
 stockmarket_key = os.getenv('STOCKMARKET_KEY')
+
+#reddit pull ins from the env file
+reddit_clientID = os.getenv('CLIENT_ID')
+reddit_clientSecret = os.getenv('CLIENT_SECRET')
+reddit_password = os.getenv('PASSWORD')
+reddit_username = os.getenv('USERNAME')
+
+
+
 
 #bot command modifier
 bot = commands.Bot(command_prefix='!')
@@ -86,14 +96,13 @@ async def ip(ctx, address):
 
 @bot.command(name='r', help='returns posts from the specified subreddit')
 async def r(ctx, sub_reddit):
-	reddit = praw.Reddit(client_id='{client_id}',
-                     client_secret='{client_secret}',
-                     password='{reddit_password}'',
+	reddit = praw.Reddit(client_id=reddit_clientID,
+                     client_secret=reddit_clientSecret,
+                     password=reddit_password,
                      user_agent='testscript by /u/sapporojones',
-                     username='{reddit_username}')
+                     username=reddit_username)
 	random_submission = reddit.subreddit(sub_reddit).random()
 	submission_url = reddit.submission(random_submission).url
-	content_url = "https://www.reddit.com/r/" + sub_reddit + "/" + str(random_submission) 
 	await ctx.send(submission_url)
 
 
@@ -129,11 +138,6 @@ async def time(ctx):
 	line5 = "**Moscow, RU: **" + rutz + "\n"
 	line6 = "**Sydney, AU: **" + autz
 	response = line1 + line2 + line3 + line4 + line5 + line6
-
-#	response = "**West Coast: **" + uswest + "\n**Central TZ: **" + uscent + "\n**East TZ: **" + useast + "\n**UK Time/GMT: **" + uktz + "\n**Moscow: **" + rutz + "\n**AussieTZ: **" + autz
-
-
-
 
 	await ctx.send(response)
 
