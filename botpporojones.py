@@ -10,9 +10,10 @@
 #0.7 - now pulling more info for stock quotes and has it properly formatted.  working on the ip command now to add google maps functionality
 #0.8 - adding a time command
 #0.9 - moving the PRAW reddit definition vars to .env where they are meant to live
-
+#0.9.1 - beginning to add EVE ESI commands for various lookup functions using unknown ids
 
 #imports
+from __future__ import print_function
 import os
 import random
 import discord
@@ -21,9 +22,13 @@ import json
 import praw
 from datetime import datetime, tzinfo, timedelta
 import pytz
+from bravado.client import SwaggerClient
+import bravado.exception
 
 from discord.ext import commands
 from dotenv import load_dotenv
+
+
 
 load_dotenv()
 
@@ -42,7 +47,7 @@ reddit_username = os.getenv('USERNAME')
 
 
 #bot command modifier
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='.')
 
 
 
@@ -141,6 +146,61 @@ async def time(ctx):
 
 	await ctx.send(response)
 
+@bot.command(name='pilot', help='get various urls about a given pilot name')
+async def pilot(ctx, characterName):
+	client = SwaggerClient.from_url('https://esi.evetech.net/latest/swagger.json')               
+	charResults = client.Search.get_search(                                                      
+        	search=characterName, 
+        	categories=['character'],
+	        strict=True,                                                                       
+	        ).result()['character']                                                            
 
+	if len(charResults) <= 0: raise Exception("Character not found")                             
+
+	characterId = charResults[0]
+	characterId = str(characterId)
+	line1 = "**PILOT SEARCH RESULTS:**" + "\n"
+	line2 = "**ZKB:** https://zkillboard.com/character/" + characterId + '/' + '\n'
+	line3 = "**EVEWHO:** https://evewho.com/character/" + characterId + "/" + "\n"
+	line4 = "**TEST Auth:** https://auth.pleaseignore.com/eve/character/" + characterId + "/" + "\n"
+	response = line1 + line2 + line3 + line4
+
+	await ctx.send(response)
+
+@bot.command(name='corp', help='get various urls about a given corp')
+async def corp(ctx, corporationName):
+        client = SwaggerClient.from_url('https://esi.evetech.net/latest/swagger.json')
+        corpResults = client.Search.get_search(
+                search=corporationName,
+                categories=['corporation'],
+                strict=True,
+                ).result()['corporation']
+
+        if len(corpResults) <= 0: raise Exception("Corporation not found")
+
+        corporationId = corpResults[0]
+        corporationId = str(corporationId)
+        line1 = "**CORP SEARCH RESULTS:**" + "\n"
+        line2 = "**ZKB:** https://zkillboard.com/corporation/" + corporationId + '/' + '\n'
+        line3 = "**EVEWHO:** https://evewho.com/corporation/" + corporationId + "/" + "\n"
+        line4 = "**DOTLAN:** http://evemaps.dotlan.net/corp/" + corporationId + "/" + "\n"
+        response = line1 + line2 + line3 + line4
+
+        await ctx.send(response)
+
+
+
+
+
+
+
+
+
+
+
+
+############################################
+#code goes above her
+############################################
 bot.run(token)
 
