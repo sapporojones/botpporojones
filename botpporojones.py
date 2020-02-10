@@ -47,7 +47,7 @@ reddit_username = os.getenv('USERNAME')
 
 
 #bot command modifier
-bot = commands.Bot(command_prefix='.')
+bot = commands.Bot(command_prefix='!')
 
 
 
@@ -107,7 +107,10 @@ async def r(ctx, sub_reddit):
                      user_agent='testscript by /u/sapporojones',
                      username=reddit_username)
 	random_submission = reddit.subreddit(sub_reddit).random()
-	submission_url = reddit.submission(random_submission).url
+	if random_submission.over_18 == True:
+		submission_url = "**Adult or spoilered content detected, not posting**"
+	else:
+		submission_url = reddit.submission(random_submission).url
 	await ctx.send(submission_url)
 
 
@@ -146,7 +149,8 @@ async def time(ctx):
 
 	await ctx.send(response)
 
-@bot.command(name='pilot', help='get various urls about a given pilot name')
+@bot.command(name='pilot', help='[RESTRICTED]get various urls about a given pilot name')
+@commands.has_role('admin')
 async def pilot(ctx, characterName):
 	client = SwaggerClient.from_url('https://esi.evetech.net/latest/swagger.json')               
 	charResults = client.Search.get_search(                                                      
@@ -188,7 +192,11 @@ async def corp(ctx, corporationName):
 
         await ctx.send(response)
 
-
+@bot.command(name='kick', help='kick a given user')
+@commands.has_role('admin')
+async def kick(ctx, user: discord.Member):
+	await ctx.guild.kick(user)
+	await ctx.send('**User has been removed**')
 
 
 
@@ -200,7 +208,7 @@ async def corp(ctx, corporationName):
 
 
 ############################################
-#code goes above her
+#code goes above here
 ############################################
 bot.run(token)
 
