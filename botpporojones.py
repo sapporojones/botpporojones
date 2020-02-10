@@ -99,7 +99,7 @@ async def ip(ctx, address):
 	full_reply = "\n **HACKER MODE ENGAGED**\n" + response1 + response2 + response3 + response4 + response5 
 	await ctx.send(full_reply)
 
-@bot.command(name='r', help='returns posts from the specified subreddit')
+@bot.command(name='r', help='returns a random post from the specified subreddit')
 async def r(ctx, sub_reddit):
 	reddit = praw.Reddit(client_id=reddit_clientID,
                      client_secret=reddit_clientSecret,
@@ -192,7 +192,7 @@ async def corp(ctx, corporationName):
 
         await ctx.send(response)
 
-@bot.command(name='kick', help='kick a given user')
+@bot.command(name='kick', help='kick a given user from the server')
 @commands.has_role('admin')
 async def kick(ctx, user: discord.Member):
 	await ctx.guild.kick(user)
