@@ -132,32 +132,32 @@ async def time(ctx):
     base_url = "http://worldtimeapi.org/api/timezone/"
 
     pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
-    pac_unix = pac_datetime_json['unixtime']
-    uswest = datetime.utcfromtimestamp(pac_unix).strftime('%H:%M')
+    pac_unix = pac_datetime_json['datetime']
+    uswest = pac_unix.strftime('%H:%M')
 
     mtn_datetime_json = requests.get(base_url + "/America/Denver").json()
     mtn_unix = mtn_datetime_json['unixtime']
-    usmtn = datetime.utcfromtimestamp(mtn_unix).strftime('%H:%M')
+    usmtn = mtn_unix.strftime('%H:%M')
 
     cent_datetime_json = requests.get(base_url + "/America/Detroit").json()
     cent_unix = cent_datetime_json['unixtime']
-    uscent = datetime.utcfromtimestamp(cent_unix).strftime('%H:%M')
+    uscent = cent_unix.strftime('%H:%M')
 
     east_datetime_json = requests.get(base_url + "/America/New_York").json()
     east_unix = east_datetime_json['unixtime']
-    useast = datetime.utcfromtimestamp(east_unix).strftime('%H:%M')
+    useast = east_unix.strftime('%H:%M')
 
     uk_datetime_json = requests.get(base_url + "/Europe/London").json()
     uk_unix = uk_datetime_json['unixtime']
-    uktz = datetime.utcfromtimestamp(uk_unix).strftime('%H:%M')
+    uktz = uk_unix.strftime('%H:%M')
 
     ru_datetime_json = requests.get(base_url + "/Europe/Moscow").json()
     ru_unix = ru_datetime_json['unixtime']
-    rutz = datetime.utcfromtimestamp(ru_unix).strftime('%H:%M')
+    rutz = ru_unix.strftime('%H:%M')
 
     au_datetime_json = requests.get(base_url + "/Australia/Sydney").json()
     au_unix = au_datetime_json['unixtime']
-    autz = datetime.utcfromtimestamp(au_unix).strftime('%H:%M')
+    autz = au_unix.strftime('%H:%M')
 
     line1 = "**West Coast: **" + uswest + "\n"
     line2 = "**US Mountain: **" + usmtn + "\n"
