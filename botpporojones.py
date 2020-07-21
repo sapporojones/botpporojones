@@ -133,31 +133,31 @@ async def time(ctx):
 
     pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
     pac_unix = pac_datetime_json['datetime']
-    uswest = pac_unix[11:15]
+    uswest = pac_unix[11:16]
 
     mtn_datetime_json = requests.get(base_url + "/America/Denver").json()
     mtn_unix = mtn_datetime_json['datetime']
-    usmtn = mtn_unix[11:15]
+    usmtn = mtn_unix[11:16]
 
-    cent_datetime_json = requests.get(base_url + "/America/Detroit").json()
+    cent_datetime_json = requests.get(base_url + "/America/Chicago").json()
     cent_unix = cent_datetime_json['datetime']
-    uscent = cent_unix[11:15]
+    uscent = cent_unix[11:16]
 
     east_datetime_json = requests.get(base_url + "/America/New_York").json()
     east_unix = east_datetime_json['datetime']
-    useast = east_unix[11:15]
+    useast = east_unix[11:16]
 
     uk_datetime_json = requests.get(base_url + "/Europe/London").json()
     uk_unix = uk_datetime_json['datetime']
-    uktz = uk_unix[11:15]
+    uktz = uk_unix[11:16]
 
     ru_datetime_json = requests.get(base_url + "/Europe/Moscow").json()
     ru_unix = ru_datetime_json['datetime']
-    rutz = ru_unix[11:15]
+    rutz = ru_unix[11:16]
 
     au_datetime_json = requests.get(base_url + "/Australia/Sydney").json()
     au_unix = au_datetime_json['datetime']
-    autz = au_unix[11:15]
+    autz = au_unix[11:16]
 
     line1 = "**West Coast: **" + uswest + "\n"
     line2 = "**US Mountain: **" + usmtn + "\n"
@@ -335,17 +335,17 @@ async def shlookup(ctx, pilot_name):
     response += "\n"
 
     try:
-        response += f"Last reported on a kill on {last_kill_time} which was {dd} days ago"
+        response += f"Last reported on a kill on {last_kill_time} which was {dd} days ago" + "\n"
 
         has_kill = 1
     except:
-        response += "Character has never been on a kill"
+        response += "Character has never been on a kill" + "\n"
         has_kill = 0
     try:
-        response += f"Last reported on a loss on {last_loss_time} which was {d1} days ago"
+        response += f"Last reported on a loss on {last_loss_time} which was {d1} days ago" + "\n"
         has_loss = 1
     except:
-        response += "Character has never had a loss"
+        response += "Character has never had a loss" + "\n"
         has_loss = 0
 
     response += ("\n")
