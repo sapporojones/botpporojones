@@ -133,31 +133,31 @@ async def time(ctx):
 
     pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
     pac_unix = pac_datetime_json['datetime']
-    uswest = pac_unix.strftime('%H:%M')
+    uswest = pac_unix[11:15]
 
     mtn_datetime_json = requests.get(base_url + "/America/Denver").json()
-    mtn_unix = mtn_datetime_json['unixtime']
-    usmtn = mtn_unix.strftime('%H:%M')
+    mtn_unix = mtn_datetime_json['datetime']
+    usmtn = mtn_unix[11:15]
 
     cent_datetime_json = requests.get(base_url + "/America/Detroit").json()
-    cent_unix = cent_datetime_json['unixtime']
-    uscent = cent_unix.strftime('%H:%M')
+    cent_unix = cent_datetime_json['datetime']
+    uscent = cent_unix[11:15]
 
     east_datetime_json = requests.get(base_url + "/America/New_York").json()
-    east_unix = east_datetime_json['unixtime']
-    useast = east_unix.strftime('%H:%M')
+    east_unix = east_datetime_json['datetime']
+    useast = east_unix[11:15]
 
     uk_datetime_json = requests.get(base_url + "/Europe/London").json()
-    uk_unix = uk_datetime_json['unixtime']
-    uktz = uk_unix.strftime('%H:%M')
+    uk_unix = uk_datetime_json['datetime']
+    uktz = uk_unix[11:15]
 
     ru_datetime_json = requests.get(base_url + "/Europe/Moscow").json()
-    ru_unix = ru_datetime_json['unixtime']
-    rutz = ru_unix.strftime('%H:%M')
+    ru_unix = ru_datetime_json['datetime']
+    rutz = ru_unix[11:15]
 
     au_datetime_json = requests.get(base_url + "/Australia/Sydney").json()
-    au_unix = au_datetime_json['unixtime']
-    autz = au_unix.strftime('%H:%M')
+    au_unix = au_datetime_json['datetime']
+    autz = au_unix[11:15]
 
     line1 = "**West Coast: **" + uswest + "\n"
     line2 = "**US Mountain: **" + usmtn + "\n"
