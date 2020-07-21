@@ -91,7 +91,7 @@ async def weather(ctx, zip_code):
     await ctx.send(response)
 
 @bot.command(name='f', help='a fortune')
-async def fortune(ctx):
+async def f(ctx):
     base_url = 'http://yerkee.com/api/fortune/wisdom'
     fortune_raw = requests.get(base_url)
     fortune_json = fortune_raw.json()
