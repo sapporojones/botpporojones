@@ -131,9 +131,9 @@ async def r(ctx, sub_reddit):
 async def time(ctx):
 	base_url = "http://worldtimeapi.org/api/timezone/"
 
-	pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
+    pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
     pac_unix = pac_datetime_json['unixtime']
-	uswest = datetime.utcfromtimestamp(pac_unix).strftime('%H:%M')
+    uswest = datetime.utcfromtimestamp(pac_unix).strftime('%H:%M')
 
     mtn_datetime_json = requests.get(base_url + "/America/Denver").json()
     mtn_unix = mtn_datetime_json['unixtime']
