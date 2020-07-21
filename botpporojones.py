@@ -67,69 +67,69 @@ bot = commands.Bot(command_prefix='!')
 #begin bot commands
 @bot.command(name='d100', help='Roll the d100 to determine the fate of the alliance.')
 async def d100(ctx):
-	roll = str(random.randint(1,100))
-	response = 'You rolled a ' + roll
-	await ctx.send(response)
+    roll = str(random.randint(1,100))
+    response = 'You rolled a ' + roll
+    await ctx.send(response)
 
 @bot.command(name='create-channel', help='creates a text channel.')
 @commands.has_role('admin')
 async def create_channel(ctx, channel_name):
-	guild = ctx.guild
-	existing_channel = discord.utils.get(guild.channels, name=channel_name)
-	if not existing_channel:
-		print(f'Creating a new channel: {channel_name}')
-		await guild.create_text_channel(channel_name)
+    guild = ctx.guild
+    existing_channel = discord.utils.get(guild.channels, name=channel_name)
+    if not existing_channel:
+        print(f'Creating a new channel: {channel_name}')
+        await guild.create_text_channel(channel_name)
 
 @bot.command(name='weather', help='returns weather info for a given zip code')
 async def weather(ctx, zip_code):
-	base_url="http://api.openweathermap.org/data/2.5/weather?"
-	complete_url = base_url + "appid=" + weather_key + "&zip=" + str(zip_code) + "&units=imperial"
-	full_json = requests.get(complete_url).json()
-	weather_description = full_json['weather'][0]['description']
-	weather_temp = full_json['main']['temp']
-	response = "The temperature at " + str(zip_code) + " is " + str(int(weather_temp)) + " degrees fahrenheit, the weather conditions are described as " + weather_description
-	await ctx.send(response)
+    base_url="http://api.openweathermap.org/data/2.5/weather?"
+    complete_url = base_url + "appid=" + weather_key + "&zip=" + str(zip_code) + "&units=imperial"
+    full_json = requests.get(complete_url).json()
+    weather_description = full_json['weather'][0]['description']
+    weather_temp = full_json['main']['temp']
+    response = "The temperature at " + str(zip_code) + " is " + str(int(weather_temp)) + " degrees fahrenheit, the weather conditions are described as " + weather_description
+    await ctx.send(response)
 
 @bot.command(name='stock', help='stock quote lookup')
 async def stock(ctx, ticker):
-	query = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + ticker + '&apikey=' + stockmarket_key
-	json_output = requests.get(query)
-	data = json_output.json()
-	response = "Here's some information about that security you requested:\n" + "The current price is: " + data["Global Quote"]["05. price"] + "\n" + "The current change is: " + data["Global Quote"]["09. change"] + "\n" + "The change percent of that is: " + data["Global Quote"]["10. change percent"] + "\n" + "The security opened at: " + data["Global Quote"]["02. open"] + "\n" + "The security closed last at: " + data["Global Quote"]["08. previous close"]
-	await ctx.send(response)
+    query = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + ticker + '&apikey=' + stockmarket_key
+    json_output = requests.get(query)
+    data = json_output.json()
+    response = "Here's some information about that security you requested:\n" + "The current price is: " + data["Global Quote"]["05. price"] + "\n" + "The current change is: " + data["Global Quote"]["09. change"] + "\n" + "The change percent of that is: " + data["Global Quote"]["10. change percent"] + "\n" + "The security opened at: " + data["Global Quote"]["02. open"] + "\n" + "The security closed last at: " + data["Global Quote"]["08. previous close"]
+    await ctx.send(response)
 
 @bot.command(name='ip', help='IP lookup info')
 async def ip(ctx, address):
-	base_url = 'https://ipapi.co/'
-	json_url = base_url + address + '/json'
-	get_data = requests.get(json_url)
-	bulk_data = get_data.json()
-	response1 = "Looking up info regarding " + bulk_data['ip'] + "\n"
-	response2 = "City: " + bulk_data["city"] + "\n"
-	response3 = "State or Region: " + bulk_data["region"] + "\n"
-	response4 = "Country: " + bulk_data["country_name"] + "\n"
-	response5 = "Organization: " + bulk_data["org"] + "\n"
-	full_reply = "\n **HACKER MODE ENGAGED**\n" + response1 + response2 + response3 + response4 + response5 
-	await ctx.send(full_reply)
+    base_url = 'https://ipapi.co/'
+    json_url = base_url + address + '/json'
+    get_data = requests.get(json_url)
+    bulk_data = get_data.json()
+    response1 = "Looking up info regarding " + bulk_data['ip'] + "\n"
+    response2 = "City: " + bulk_data["city"] + "\n"
+    response3 = "State or Region: " + bulk_data["region"] + "\n"
+    response4 = "Country: " + bulk_data["country_name"] + "\n"
+    response5 = "Organization: " + bulk_data["org"] + "\n"
+    full_reply = "\n **HACKER MODE ENGAGED**\n" + response1 + response2 + response3 + response4 + response5
+    await ctx.send(full_reply)
 
 @bot.command(name='r', help='returns posts from the specified subreddit')
 async def r(ctx, sub_reddit):
-	reddit = praw.Reddit(client_id=reddit_clientID,
+    reddit = praw.Reddit(client_id=reddit_clientID,
                      client_secret=reddit_clientSecret,
                      password=reddit_password,
                      user_agent='testscript by /u/sapporojones',
                      username=reddit_username)
-	random_submission = reddit.subreddit(sub_reddit).random()
-	if random_submission.over_18 == True:
-		submission_url = "Adult content detected, not posting"
-	else:
-		submission_url = reddit.submission(random_submission).url
-	await ctx.send(submission_url)
+    random_submission = reddit.subreddit(sub_reddit).random()
+    if random_submission.over_18 == True:
+        submission_url = "Adult content detected, not posting"
+    else:
+        submission_url = reddit.submission(random_submission).url
+    await ctx.send(submission_url)
 
 
 @bot.command(name='time', help='current time for a variety of timezones')
 async def time(ctx):
-	base_url = "http://worldtimeapi.org/api/timezone/"
+    base_url = "http://worldtimeapi.org/api/timezone/"
 
     pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
     pac_unix = pac_datetime_json['unixtime']
@@ -159,38 +159,38 @@ async def time(ctx):
     au_unix = au_datetime_json['unixtime']
     autz = datetime.utcfromtimestamp(au_unix).strftime('%H:%M')
 
-	line1 = "**West Coast: **" + uswest + "\n"
+    line1 = "**West Coast: **" + uswest + "\n"
     line2 = "**US Mountain: **" + usmtn + "\n"
-	line3 = "**US Central: **" + uscent + "\n"
-	line4 = "**US East: **" + useast + "\n"
-	line5 = "**London/GMT: **" + uktz + "\n"
-	line6 = "**Moscow, RU: **" + rutz + "\n"
-	line7 = "**Sydney, AU: **" + autz
-	response = line1 + line2 + line3 + line4 + line5 + line6 + line7
+    line3 = "**US Central: **" + uscent + "\n"
+    line4 = "**US East: **" + useast + "\n"
+    line5 = "**London/GMT: **" + uktz + "\n"
+    line6 = "**Moscow, RU: **" + rutz + "\n"
+    line7 = "**Sydney, AU: **" + autz
+    response = line1 + line2 + line3 + line4 + line5 + line6 + line7
 
-	await ctx.send(response)
+    await ctx.send(response)
 
 @bot.command(name='pilot', help='[RESTRICTED]get various urls about a given pilot name')
 @commands.has_role('admin')
 async def pilot(ctx, characterName):
-	client = SwaggerClient.from_url('https://esi.evetech.net/latest/swagger.json')               
-	charResults = client.Search.get_search(                                                      
-        	search=characterName, 
-        	categories=['character'],
-	        strict=True,                                                                       
-	        ).result()['character']                                                            
+    client = SwaggerClient.from_url('https://esi.evetech.net/latest/swagger.json')
+    charResults = client.Search.get_search(
+            search=characterName,
+            categories=['character'],
+            strict=True,
+            ).result()['character']
 
-	if len(charResults) <= 0: raise Exception("Character not found")                             
+    if len(charResults) <= 0: raise Exception("Character not found")
 
-	characterId = charResults[0]
-	characterId = str(characterId)
-	line1 = "**PILOT SEARCH RESULTS:**" + "\n"
-	line2 = "**ZKB:** https://zkillboard.com/character/" + characterId + '/' + '\n'
-	line3 = "**EVEWHO:** https://evewho.com/character/" + characterId + "/" + "\n"
-	line4 = "**TEST Auth:** https://auth.pleaseignore.com/eve/character/" + characterId + "/" + "\n"
-	response = line1 + line2 + line3 + line4
+    characterId = charResults[0]
+    characterId = str(characterId)
+    line1 = "**PILOT SEARCH RESULTS:**" + "\n"
+    line2 = "**ZKB:** https://zkillboard.com/character/" + characterId + '/' + '\n'
+    line3 = "**EVEWHO:** https://evewho.com/character/" + characterId + "/" + "\n"
+    line4 = "**TEST Auth:** https://auth.pleaseignore.com/eve/character/" + characterId + "/" + "\n"
+    response = line1 + line2 + line3 + line4
 
-	await ctx.send(response)
+    await ctx.send(response)
 
 @bot.command(name='corp', help='get various urls about a given corp')
 async def corp(ctx, corporationName):
@@ -216,8 +216,8 @@ async def corp(ctx, corporationName):
 @bot.command(name='kick', help='kick a given user')
 @commands.has_role('admin')
 async def kick(ctx, user: discord.Member):
-	await ctx.guild.kick(user)
-	await ctx.send('**User has been removed**')
+    await ctx.guild.kick(user)
+    await ctx.send('**User has been removed**')
 
 @bot.command(name='shlookup', help='get info on a pilot')
 async def shlookup(ctx, pilot_name):
