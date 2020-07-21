@@ -90,6 +90,15 @@ async def weather(ctx, zip_code):
     response = "The temperature at " + str(zip_code) + " is " + str(int(weather_temp)) + " degrees fahrenheit, the weather conditions are described as " + weather_description
     await ctx.send(response)
 
+@bot.command(name='f', help='a fortune')
+async def fortune(ctx):
+    base_url = 'http://yerkee.com/api/fortune/wisdom'
+    fortune_raw = requests.get(base_url)
+    fortune_json = fortune_raw.json()
+    fortune_text = fortune_json['fortune']
+    await ctx.send(fortune_text)
+
+
 @bot.command(name='stock', help='stock quote lookup')
 async def stock(ctx, ticker):
     query = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + ticker + '&apikey=' + stockmarket_key
