@@ -131,34 +131,42 @@ async def r(ctx, sub_reddit):
 async def time(ctx):
 	base_url = "http://worldtimeapi.org/api/timezone/"
 
-	global_json = requests.get(base_url + "/America/Los_Angeles").json()
-	global_utc = global_json['unixtime']
+	pac_datetime_json = requests.get(base_url + "/America/Los_Angeles").json()
+    pac_unix = pac_datetime_json['unixtime']
+	uswest = datetime.utcfromtimestamp(pac_unix).strftime('%H:%M')
 
-	westutc = global_utc - 28800
-	uswest = datetime.utcfromtimestamp(westutc).strftime('%H:%M')
+    mtn_datetime_json = requests.get(base_url + "/America/Denver").json()
+    mtn_unix = mtn_datetime_json['unixtime']
+    usmtn = datetime.utcfromtimestamp(mtn_unix).strftime('%H:%M')
 
-	cstutc = global_utc - 21600
-	uscent = datetime.utcfromtimestamp(cstutc).strftime('%H:%M')
+    cent_datetime_json = requests.get(base_url + "/America/Detroit").json()
+    cent_unix = cent_datetime_json['unixtime']
+    uscent = datetime.utcfromtimestamp(cent_unix).strftime('%H:%M')
 
-	estutc = global_utc - 18000
-	useast = datetime.utcfromtimestamp(estutc).strftime('%H:%M')
+    east_datetime_json = requests.get(base_url + "/America/New_York").json()
+    east_unix = east_datetime_json['unixtime']
+    useast = datetime.utcfromtimestamp(east_unix).strftime('%H:%M')
 
-	ukutc = global_utc
-	uktz = datetime.utcfromtimestamp(ukutc).strftime('%H:%M')
+    uk_datetime_json = requests.get(base_url + "/Europe/London").json()
+    uk_unix = uk_datetime_json['unixtime']
+    uktz = datetime.utcfromtimestamp(uk_unix).strftime('%H:%M')
 
-	ruutc = global_utc + 10800
-	rutz = datetime.utcfromtimestamp(ruutc).strftime('%H:%M')
+    ru_datetime_json = requests.get(base_url + "/Europe/Moscow").json()
+    ru_unix = ru_datetime_json['unixtime']
+    rutz = datetime.utcfromtimestamp(ru_unix).strftime('%H:%M')
 
-	auutc = global_utc + 39600
-	autz = datetime.utcfromtimestamp(auutc).strftime('%H:%M')
+    au_datetime_json = requests.get(base_url + "/Australia/Sydney").json()
+    au_unix = au_datetime_json['unixtime']
+    autz = datetime.utcfromtimestamp(au_unix).strftime('%H:%M')
 
 	line1 = "**West Coast: **" + uswest + "\n"
-	line2 = "**US Central: **" + uscent + "\n"
-	line3 = "**US East: **" + useast + "\n"
-	line4 = "**London/GMT: **" + uktz + "\n"
-	line5 = "**Moscow, RU: **" + rutz + "\n"
-	line6 = "**Sydney, AU: **" + autz
-	response = line1 + line2 + line3 + line4 + line5 + line6
+    line2 = "**US Mountain: **" + usmtn + "\n"
+	line3 = "**US Central: **" + uscent + "\n"
+	line4 = "**US East: **" + useast + "\n"
+	line5 = "**London/GMT: **" + uktz + "\n"
+	line6 = "**Moscow, RU: **" + rutz + "\n"
+	line7 = "**Sydney, AU: **" + autz
+	response = line1 + line2 + line3 + line4 + line5 + line6 + line7
 
 	await ctx.send(response)
 
@@ -280,6 +288,17 @@ async def shlookup(ctx, pilot_name):
         last_kill_get = requests.get(last_kill_url)
         last_kill_date_json = last_kill_get.json()
         last_kill_datetime = last_kill_date_json["killmail_time"]
+        last_kill_time = last_kill_datetime[0:10]
+
+        try:
+
+#           dd = datetime.utcnow().date() - date(int(last_kill_time[0:4]), int(last_kill_time[6:7]), int(last_kill_time[9:10]))
+            dd = datetime.utcnow().date() - datetime.strptime(last_kill_time, '%Y-%m-%d').date()
+            dd = dd.days
+        except:
+            dd = str(0)
+
+
     except:
         total_kills = str(0)
     
@@ -297,26 +316,36 @@ async def shlookup(ctx, pilot_name):
         last_loss_get_url = "https://esi.evetech.net/latest/killmails/" + str(last_loss_id_0) + "/" + str(last_loss_hash) + "/?datasource=tranquility"
         last_loss_get = requests.get(last_loss_get_url)
         last_loss_date_json = last_loss_get.json()
-        last_loss_datetime = last_loss_date_json["killmail_time"]
+        lldt = last_loss_date_json["killmail_time"]
+
+        last_loss_time = lldt[0:10]
+        try:
+
+#           d1 = datetime.utcnow().date() - date(int(last_loss_time[0:4]), int(last_loss_time[6:7]), int(last_loss_time[9:10]))
+            d1 = datetime.utcnow().date() - datetime.strptime(last_loss_time, '%Y-%m-%d').date()
+            d1 = d1.days
+        except:
+            d1 = str(0)
+
     except:
         total_losses = str(0)
 
     response += "Total Losses: " + total_losses + "\n"
    
     response += "\n"
-    
 
     try:
-        response += f"Last reported on a kill on {last_kill_datetime}" + "\n"
+        response += f"Last reported on a kill on {last_kill_time} which was {dd} days ago"
+
         has_kill = 1
     except:
-        response += "Character has never been on a kill" + "\n"
+        response += "Character has never been on a kill"
         has_kill = 0
     try:
-        response += f"Last reported on a loss on {last_loss_datetime}" + "\n"
+        response += f"Last reported on a loss on {last_loss_time} which was {d1} days ago"
         has_loss = 1
     except:
-        response += ("Character has never had a loss") + "\n"
+        response += "Character has never had a loss"
         has_loss = 0
 
     response += ("\n")
